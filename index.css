@@ -63,8 +63,8 @@ body {
 h1 {
   color: light-dark(var(--light-primary), var(--dark-primary));
   margin-bottom: 15px;
-  font-size: 2em;
-  font-weight: 500;
+  font-size: 2.2em;
+  font-weight: 700;
 }
 
 p {
@@ -74,14 +74,14 @@ p {
 }
 
 textarea {
-  width: calc(100% - 22px);
+  width: calc(100% - 30px); /* Adjust for padding */
   padding: 15px;
   margin-bottom: 25px;
   border: 1px solid light-dark(var(--light-border), var(--dark-border));
   border-radius: 8px;
   font-size: 16px;
   min-height: 120px;
-  background-color: light-dark(var(--light-bg), var(--dark-card-bg)); /* Use darker card bg for dark text area */
+  background-color: light-dark(var(--light-bg), var(--dark-card-bg));
   color: light-dark(var(--light-text-primary), var(--dark-text-primary));
   resize: vertical;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -104,6 +104,11 @@ button {
   font-weight: 500;
   transition: background-color 0.3s ease, box-shadow 0.2s ease;
   box-shadow: 0 1px 2px light-dark(var(--light-shadow-color-2), var(--dark-shadow-color-2));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 180px;
 }
 
 button:hover {
@@ -111,7 +116,7 @@ button:hover {
   box-shadow: 0 1px 3px light-dark(var(--light-shadow-color-1), var(--dark-shadow-color-1));
 }
 
-button:focus {
+button:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px light-dark(var(--light-button-focus-shadow-color), var(--dark-button-focus-shadow-color));
 }
@@ -151,11 +156,11 @@ button:disabled {
   background-color: transparent; /* Make the outer container transparent */
   width: var(--flashcard-width);
   height: var(--flashcard-height);
-  border: none; /* Remove border from outer container */
+  border: none;
   border-radius: 10px;
   cursor: pointer;
-  perspective: 1000px; /* Add perspective for 3D effect */
-  box-shadow: none; /* Remove shadow from outer container */
+  perspective: 1000px;
+  box-shadow: none;
 }
 
 .flashcard-inner {
@@ -165,8 +170,8 @@ button:disabled {
   text-align: center;
   transition: transform 0.6s;
   transform-style: preserve-3d;
-  box-shadow: 0 1px 2px light-dark(var(--light-shadow-color-2), var(--dark-shadow-color-2)); /* Apply shadow here */
-  border-radius: 10px; /* Apply border-radius here */
+  box-shadow: 0 1px 2px light-dark(var(--light-shadow-color-2), var(--dark-shadow-color-2));
+  border-radius: 10px;
 }
 
 .flashcard.flipped .flashcard-inner {
@@ -178,17 +183,18 @@ button:disabled {
   position: absolute;
   width: 100%;
   height: 100%;
-  -webkit-backface-visibility: hidden; /* Safari */
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 20px; /* Reduced padding for content */
+  padding: 20px;
   box-sizing: border-box;
-  border-radius: 10px; /* Match parent */
-  border: 1px solid light-dark(var(--light-border), var(--dark-border)); /* Apply border here */
-  background-color: light-dark(var(--light-card-bg), var(--dark-card-bg)); /* Apply background here */
+  border-radius: 10px;
+  border: 1px solid light-dark(var(--light-border), var(--dark-border));
+  background-color: light-dark(var(--light-card-bg), var(--dark-card-bg));
+  transition: border-color 0.3s ease;
 }
 
 .flashcard-back {
@@ -204,17 +210,16 @@ button:disabled {
    border-color: light-dark(var(--light-primary), var(--dark-primary));
 }
 
-
 .term {
-  font-size: 1.3em; /* Adjust size */
+  font-size: 1.3em;
   font-weight: 500;
   color: light-dark(var(--light-text-primary), var(--dark-text-primary));
 }
 
 .definition {
-  font-size: 1.0em; /* Adjust size */
+  font-size: 1.0em;
   color: light-dark(var(--light-text-secondary), var(--dark-text-secondary));
-  line-height: 1.4; /* Adjust line height */
+  line-height: 1.4;
 }
 
 footer {
@@ -225,45 +230,60 @@ footer {
   font-size: 0.9em;
 }
 
-/* New Styles for API Key Input */
+footer a {
+  color: light-dark(var(--light-primary), var(--dark-primary));
+  text-decoration: none;
+  font-weight: 500;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+
+/* New Styles for Modal */
 .hidden {
-  display: none;
+  display: none !important;
 }
 
-#apiKeySection {
-  margin-bottom: 30px;
-  padding: 20px;
-  border: 1px solid light-dark(var(--light-border), var(--dark-border));
-  border-radius: 8px;
-  background-color: light-dark(var(--light-bg), var(--dark-card-bg));
+dialog {
+  width: 90%;
+  max-width: 500px;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px light-dark(var(--light-shadow-color-1), var(--dark-shadow-color-1));
+  padding: 30px;
+  background-color: light-dark(var(--light-surface), var(--dark-surface));
+  color: light-dark(var(--light-text-primary), var(--dark-text-primary));
 }
 
-.api-key-title {
-  font-size: 1.2em;
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.modal-title {
+  font-size: 1.5em;
   margin-top: 0;
   margin-bottom: 10px;
   font-weight: 500;
   color: light-dark(var(--light-text-primary), var(--dark-text-primary));
 }
 
-.api-key-description {
-  font-size: 0.9em;
+.modal-description {
+  font-size: 1em;
   color: light-dark(var(--light-text-secondary), var(--dark-text-secondary));
-  margin-bottom: 20px;
-}
-
-.input-group {
-  display: flex;
-  gap: 10px;
+  margin-bottom: 25px;
 }
 
 #apiKeyInput {
-  flex-grow: 1;
+  width: calc(100% - 28px);
   padding: 14px;
+  margin-bottom: 25px;
   border: 1px solid light-dark(var(--light-border), var(--dark-border));
   border-radius: 8px;
   font-size: 16px;
-  background-color: light-dark(var(--light-surface), var(--dark-surface));
+  background-color: light-dark(var(--light-bg), var(--dark-bg));
   color: light-dark(var(--light-text-primary), var(--dark-text-primary));
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -274,21 +294,39 @@ footer {
   box-shadow: 0 0 0 2px light-dark(var(--light-focus-shadow-color), var(--dark-focus-shadow-color));
 }
 
-.api-key-status {
-  font-size: 0.9em;
-  color: light-dark(var(--light-text-secondary), var(--dark-text-secondary));
-  margin-bottom: 15px;
+.modal-actions {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
-#changeApiKey {
-  color: light-dark(var(--light-primary), var(--dark-primary));
-  text-decoration: none;
-  font-weight: 500;
+.modal-actions button {
+  min-width: 100px;
 }
 
-#changeApiKey:hover {
-  text-decoration: underline;
+/* Secondary button style for Cancel */
+#cancelApiKey {
+    background-color: transparent;
+    color: light-dark(var(--light-primary), var(--dark-primary));
+    border: 1px solid light-dark(var(--light-border), var(--dark-border));
+    box-shadow: none;
+}
+#cancelApiKey:hover {
+    background-color: light-dark(var(--light-bg), var(--dark-card-bg));
+}
+
+/* Spinner Styles */
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid light-dark(rgba(255, 255, 255, 0.3), rgba(0,0,0,0.3));
+  border-radius: 50%;
+  border-top-color: light-dark(var(--light-button-text), var(--dark-button-text));
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }

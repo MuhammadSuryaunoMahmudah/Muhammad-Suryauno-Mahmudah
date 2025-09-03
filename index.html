@@ -1,14 +1,23 @@
-<script type="importmap">
-  {
-    "imports": {
-      "@google/genai": "https://esm.sh/@google/genai@^0.7.0"
-    }
-  }
-  </script>
-  <!-- Add Google Fonts Link -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcard Generator</title>
+    <link rel="stylesheet" href="index.css">
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/genai": "https://esm.sh/@google/genai@^0.7.0"
+        }
+      }
+    </script>
+    <!-- Add Google Fonts Link -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
 
   <div class="container">
     <h1>Flashcard Generator</h1>
@@ -16,30 +25,42 @@
       Enter a topic or a list of terms and definitions to generate flashcards using the Gemini API.
     </p>
 
-    <div id="apiKeySection">
-      <h2 class="api-key-title">Enter Your API Key</h2>
-      <p class="api-key-description">To use this app, please enter your Google Gemini API key. Your key is stored only in your browser for this session.</p>
-      <div class="input-group">
-          <input type="password" id="apiKeyInput" placeholder="Enter your Gemini API Key">
-          <button id="saveApiKeyButton">Save Key</button>
-      </div>
-    </div>
-
-    <div id="appContent" class="hidden">
-      <div class="api-key-status">
-        <span>API Key is set.</span>
-        <a href="#" id="changeApiKey">Change Key</a>
-      </div>
+    <div id="mainContent">
       <textarea
         id="topicInput"
-        placeholder="Enter topic (e.g., Ancient Rome) or 'Term: Definition' pairs (one per line)"
+        placeholder="Enter topic (e.g., Solar System) or 'Term: Definition' pairs (one per line)"
       ></textarea>
-      <button id="generateButton">Generate Flashcards</button>
+      <button id="generateButton">
+        <span class="button-text">Generate Flashcards</span>
+        <div class="spinner hidden"></div>
+      </button>
     </div>
 
     <div id="errorMessage" class="error-message"></div>
-    <div id="exampleMessage" class="example-message hidden">Here is an example set to get you started! Enter your API key above to generate your own.</div>
+    <div id="exampleMessage" class="example-message hidden">Here's a sample set on the Solar System. To create your own, enter a topic above and click generate!</div>
     <div id="flashcardsContainer" class="flashcards-container">
       <!-- Flashcards will be generated here -->
     </div>
+
+    <footer>
+      <a href="#" id="changeApiKeyLink">Change API Key</a>
+    </footer>
   </div>
+
+  <!-- API Key Modal Dialog -->
+  <dialog id="apiKeyModal">
+    <form method="dialog">
+      <h2 class="modal-title">Enter Your Gemini API Key</h2>
+      <p class="modal-description">To generate flashcards, please enter your Google Gemini API key. Your key is stored only in your browser for this session.</p>
+      <input type="password" id="apiKeyInput" placeholder="Paste your Gemini API Key here" required>
+      <div class="modal-actions">
+        <button type="button" id="cancelApiKey">Cancel</button>
+        <button type="submit" id="saveApiKeyButton">Save and Generate</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module" src="index.tsx"></script>
+
+</body>
+</html>
