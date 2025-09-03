@@ -18,7 +18,7 @@ const flashcardsContainer = document.getElementById(
 ) as HTMLDivElement;
 const errorMessage = document.getElementById('errorMessage') as HTMLDivElement;
 
-const ai = new GoogleGenAI({apiKey: process.env.GEMINI_API_KEY});
+const ai = new GoogleGenAI({apiKey: process.env.API_KEY});
 
 generateButton.addEventListener('click', async () => {
   const topic = topicInput.value.trim();
