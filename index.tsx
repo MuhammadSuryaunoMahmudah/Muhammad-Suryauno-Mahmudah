@@ -2,7 +2,7 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
-import { GoogleGenAI } from '@google/genai';
+import { GoogleGenAI, Type } from '@google/genai';
 
 interface Flashcard {
   term: string;
@@ -33,6 +33,9 @@ const apiKeyModal = document.getElementById('apiKeyModal') as HTMLDialogElement;
 const apiKeyInput = document.getElementById('apiKeyInput') as HTMLInputElement;
 const saveApiKeyButton = document.getElementById('saveApiKeyButton') as HTMLButtonElement;
 const cancelApiKeyButton = document.getElementById('cancelApiKey') as HTMLButtonElement;
+
+// Theme Toggle
+const themeToggle = document.getElementById('theme-toggle') as HTMLInputElement;
 
 let ai: GoogleGenAI | null = null;
 const API_KEY_SESSION_STORAGE_KEY = 'GEMINI_API_KEY';
@@ -111,7 +114,7 @@ function setLoading(isLoading: boolean) {
 
 
 /**
- * Generates and renders flashcards based on the topic input.
+ * Generates and renders flashcards based on the topic input using structured JSON output.
  */
 async function generateAndRenderCards() {
   const topic = topicInput.value.trim();
@@ -131,39 +134,57 @@ async function generateAndRenderCards() {
   flashcardsContainer.innerHTML = '';
 
   try {
-    const prompt = `Generate a list of flashcards for the topic of "${topic}". Each flashcard should have a term and a concise definition. Format the output as a list of "Term: Definition" pairs, with each pair on a new line. Ensure terms and definitions are distinct and clearly separated by a single colon. Do not include any introductory text. For example:
-Hello: Hola
-Goodbye: Adiós`;
-    
-    const result = await ai.models.generateContent({
+    const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash',
-        contents: prompt,
+        contents: `Generate a list of flashcards for the topic of "${topic}". Each flashcard should have a term and a concise definition.`,
+        config: {
+            responseMimeType: "application/json",
+            responseSchema: {
+                type: Type.OBJECT,
+                properties: {
+                    flashcards: {
+                        type: Type.ARRAY,
+                        description: "A list of flashcard objects.",
+                        items: {
+                            type: Type.OBJECT,
+                            properties: {
+                                term: {
+                                    type: Type.STRING,
+                                    description: 'The key term or concept.'
+                                },
+                                definition: {
+                                    type: Type.STRING,
+                                    description: 'The definition or explanation of the term.'
+                                }
+                            },
+                            required: ['term', 'definition']
+                        }
+                    }
+                },
+                required: ['flashcards']
+            }
+        }
     });
-    
-    const responseText = result.text ?? '';
+
+    const responseText = response.text ?? '';
     if (!responseText) {
       throw new Error('Received an empty response from the API.');
     }
 
-    const flashcards: Flashcard[] = responseText
-      .split('\n')
-      .map((line) => {
-        const parts = line.split(':');
-        if (parts.length >= 2 && parts[0].trim()) {
-          const term = parts[0].trim();
-          const definition = parts.slice(1).join(':').trim();
-          if (definition) {
-            return { term, definition };
-          }
-        }
-        return null;
-      })
-      .filter((card): card is Flashcard => card !== null);
+    let flashcards: Flashcard[] = [];
+    try {
+        const parsedJson = JSON.parse(responseText);
+        flashcards = parsedJson.flashcards;
+    } catch (parseError) {
+        console.error("JSON parsing error:", parseError);
+        throw new Error("Failed to parse the response from the API. The format was invalid.");
+    }
 
-    if (flashcards.length > 0) {
+
+    if (flashcards && flashcards.length > 0) {
       renderFlashcards(flashcards);
     } else {
-      errorMessage.textContent = 'Could not parse any valid flashcards from the response. The topic might be too ambiguous. Please try again with a more specific topic.';
+      errorMessage.textContent = 'Could not generate any valid flashcards from the response. The topic might be too ambiguous. Please try again with a more specific topic.';
     }
   } catch (error: unknown) {
     console.error('Error generating content:', error);
@@ -179,19 +200,45 @@ Goodbye: Adiós`;
   }
 }
 
+/**
+ * Sets the theme for the application.
+ * @param {string} theme The theme to set ('light' or 'dark').
+ */
+function setTheme(theme: 'light' | 'dark') {
+    document.documentElement.setAttribute('data-theme', theme);
+    themeToggle.checked = theme === 'dark';
+    localStorage.setItem('theme', theme);
+}
 
 // --- Event Listeners ---
 
 // On page load
 document.addEventListener('DOMContentLoaded', () => {
+  // Theme initialization
+  const savedTheme = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (savedTheme) {
+    setTheme(savedTheme as 'light' | 'dark');
+  } else {
+    setTheme(prefersDark ? 'dark' : 'light');
+  }
+
+  // API Key initialization
   const storedApiKey = sessionStorage.getItem(API_KEY_SESSION_STORAGE_KEY);
   if (storedApiKey) {
     initializeAi(storedApiKey);
   }
-  // Always render default cards on load for demonstration
+
+  // Render default cards
   renderFlashcards(DEFAULT_FLASHCARDS);
   exampleMessage.classList.remove('hidden');
 });
+
+// Theme toggle change
+themeToggle.addEventListener('change', () => {
+    setTheme(themeToggle.checked ? 'dark' : 'light');
+});
+
 
 // Generate button click
 generateButton.addEventListener('click', () => {

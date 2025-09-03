@@ -8,7 +8,7 @@
     <script type="importmap">
       {
         "imports": {
-          "@google/genai": "https://esm.sh/@google/genai@^0.7.0"
+          "@google/genai": "https://esm.sh/@google/genai@^0.11.2"
         }
       }
     </script>
@@ -20,7 +20,16 @@
 <body>
 
   <div class="container">
-    <h1>Flashcard Generator</h1>
+    <div class="header-container">
+        <h1>Flashcard Generator</h1>
+        <label for="theme-toggle" class="theme-toggle-label" aria-label="Toggle dark mode">
+            <input type="checkbox" id="theme-toggle">
+            <span class="theme-toggle-switch">
+                <span class="sun-icon"></span>
+                <span class="moon-icon"></span>
+            </span>
+        </label>
+    </div>
     <p>
       Enter a topic or a list of terms and definitions to generate flashcards using the Gemini API.
     </p>
