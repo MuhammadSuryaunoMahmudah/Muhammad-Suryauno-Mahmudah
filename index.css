@@ -130,6 +130,14 @@ button:disabled {
   min-height: 1.5em;
 }
 
+.example-message {
+  color: light-dark(var(--light-text-secondary), var(--dark-text-secondary));
+  margin-top: 20px;
+  margin-bottom: -15px;
+  font-style: italic;
+  font-size: 0.9em;
+}
+
 .flashcards-container {
   display: flex;
   flex-wrap: wrap;
@@ -215,4 +223,72 @@ footer {
   border-top: 1px solid light-dark(var(--light-border), var(--dark-border));
   color: light-dark(var(--light-text-secondary), var(--dark-text-secondary));
   font-size: 0.9em;
+}
+
+/* New Styles for API Key Input */
+.hidden {
+  display: none;
+}
+
+#apiKeySection {
+  margin-bottom: 30px;
+  padding: 20px;
+  border: 1px solid light-dark(var(--light-border), var(--dark-border));
+  border-radius: 8px;
+  background-color: light-dark(var(--light-bg), var(--dark-card-bg));
+}
+
+.api-key-title {
+  font-size: 1.2em;
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-weight: 500;
+  color: light-dark(var(--light-text-primary), var(--dark-text-primary));
+}
+
+.api-key-description {
+  font-size: 0.9em;
+  color: light-dark(var(--light-text-secondary), var(--dark-text-secondary));
+  margin-bottom: 20px;
+}
+
+.input-group {
+  display: flex;
+  gap: 10px;
+}
+
+#apiKeyInput {
+  flex-grow: 1;
+  padding: 14px;
+  border: 1px solid light-dark(var(--light-border), var(--dark-border));
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: light-dark(var(--light-surface), var(--dark-surface));
+  color: light-dark(var(--light-text-primary), var(--dark-text-primary));
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#apiKeyInput:focus {
+  outline: none;
+  border-color: light-dark(var(--light-primary), var(--dark-primary));
+  box-shadow: 0 0 0 2px light-dark(var(--light-focus-shadow-color), var(--dark-focus-shadow-color));
+}
+
+.api-key-status {
+  font-size: 0.9em;
+  color: light-dark(var(--light-text-secondary), var(--dark-text-secondary));
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#changeApiKey {
+  color: light-dark(var(--light-primary), var(--dark-primary));
+  text-decoration: none;
+  font-weight: 500;
+}
+
+#changeApiKey:hover {
+  text-decoration: underline;
 }

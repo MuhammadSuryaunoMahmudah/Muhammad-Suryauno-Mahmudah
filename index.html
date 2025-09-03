@@ -15,12 +15,30 @@
     <p>
       Enter a topic or a list of terms and definitions to generate flashcards using the Gemini API.
     </p>
-    <textarea
-      id="topicInput"
-      placeholder="Enter topic (e.g., Ancient Rome) or 'Term: Definition' pairs (one per line)"
-    ></textarea>
-    <button id="generateButton">Generate Flashcards</button>
+
+    <div id="apiKeySection">
+      <h2 class="api-key-title">Enter Your API Key</h2>
+      <p class="api-key-description">To use this app, please enter your Google Gemini API key. Your key is stored only in your browser for this session.</p>
+      <div class="input-group">
+          <input type="password" id="apiKeyInput" placeholder="Enter your Gemini API Key">
+          <button id="saveApiKeyButton">Save Key</button>
+      </div>
+    </div>
+
+    <div id="appContent" class="hidden">
+      <div class="api-key-status">
+        <span>API Key is set.</span>
+        <a href="#" id="changeApiKey">Change Key</a>
+      </div>
+      <textarea
+        id="topicInput"
+        placeholder="Enter topic (e.g., Ancient Rome) or 'Term: Definition' pairs (one per line)"
+      ></textarea>
+      <button id="generateButton">Generate Flashcards</button>
+    </div>
+
     <div id="errorMessage" class="error-message"></div>
+    <div id="exampleMessage" class="example-message hidden">Here is an example set to get you started! Enter your API key above to generate your own.</div>
     <div id="flashcardsContainer" class="flashcards-container">
       <!-- Flashcards will be generated here -->
     </div>
